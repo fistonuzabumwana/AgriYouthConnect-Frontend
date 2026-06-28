@@ -172,7 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     // Expose dynamic dashboards for completed farm profiles
     final profile = profileProvider.profile;
     if (profile != null && !_isEditing) {
-      final isEn = locale.languageCode == 'en';
+      final isEn = l10n.locale.languageCode == 'en';
       final activeCrops = profile.cropType.isNotEmpty ? profile.cropType : 'Maize';
 
       return Scaffold(
@@ -199,7 +199,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             profile.name,
                             style: TextStyle(
                               fontSize: 22,
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               color: isDark ? Colors.white : Colors.black,
                             ),
                           ),

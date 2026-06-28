@@ -308,7 +308,7 @@ class _AdvisoryDashboardWidgetState extends State<AdvisoryDashboardWidget> {
                   Text(
                     '${risk['probability_pct']}% Prob (${risk['warning_level']})',
                     style: TextStyle(
-                      fontWeight: FontWeight.black,
+                      fontWeight: FontWeight.w900,
                       color: isHigh ? Colors.red : Colors.grey,
                     ),
                   ),
