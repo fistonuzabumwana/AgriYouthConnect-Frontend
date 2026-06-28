@@ -136,7 +136,7 @@ class MainAppLayout extends StatelessWidget {
                                   : const Color(0xFF2E7D32),
                               size: 20,
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 5),
                             const Text(
                               'Mock Sync Server:',
                               style: TextStyle(
@@ -161,7 +161,7 @@ class MainAppLayout extends StatelessWidget {
                                     : const Color(0xFF2E7D32),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 4.5),
                             // Simple high contrast toggle button
                             Semantics(
                               button: true,

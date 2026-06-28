@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final IconData? prefixIcon;
   final bool readOnly;
   final VoidCallback? onTap;
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
     this.readOnly = false,
     this.onTap,
+    this.obscureText = false,
   });
 
   @override
@@ -51,6 +53,7 @@ class CustomTextField extends StatelessWidget {
             validator: validator,
             readOnly: readOnly,
             onTap: onTap,
+            obscureText: obscureText,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,

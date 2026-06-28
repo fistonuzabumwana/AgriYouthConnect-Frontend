@@ -23,13 +23,14 @@ class UserProfileModelAdapter extends TypeAdapter<UserProfileModel> {
       cropType: fields[3] as String,
       farmSize: fields[4] as double,
       experienceLevel: fields[5] as String,
+      role: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserProfileModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class UserProfileModelAdapter extends TypeAdapter<UserProfileModel> {
       ..writeByte(4)
       ..write(obj.farmSize)
       ..writeByte(5)
-      ..write(obj.experienceLevel);
+      ..write(obj.experienceLevel)
+      ..writeByte(6)
+      ..write(obj.role);
   }
 
   @override

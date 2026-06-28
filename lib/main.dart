@@ -23,6 +23,8 @@ import 'package:agriyouthconnect/presentation/providers/profile_provider.dart';
 import 'package:agriyouthconnect/presentation/providers/market_price_provider.dart';
 import 'package:agriyouthconnect/presentation/providers/training_knowledge_provider.dart';
 
+import 'package:agriyouthconnect/presentation/screens/login_screen.dart';
+
 // UI Screens and Layouts
 import 'package:agriyouthconnect/presentation/screens/market_board_screen.dart';
 import 'package:agriyouthconnect/presentation/screens/registration_screen.dart';
@@ -121,7 +123,13 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
 
-        home: const AppHomeShell(),
+        home: Consumer<AuthProvider>(
+          builder: (context, auth, _) {
+            return auth.isAuthenticated
+                ? const AppHomeShell()
+                : const LoginScreen();
+          },
+        ),
       ),
     );
   }

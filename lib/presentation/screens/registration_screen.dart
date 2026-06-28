@@ -5,6 +5,8 @@ import 'package:agriyouthconnect/data/models/user_profile_model.dart';
 import 'package:agriyouthconnect/presentation/providers/profile_provider.dart';
 import 'package:agriyouthconnect/presentation/widgets/custom_button.dart';
 import 'package:agriyouthconnect/presentation/widgets/custom_text_field.dart';
+import 'package:agriyouthconnect/presentation/widgets/advisory_dashboard_widget.dart';
+import 'package:agriyouthconnect/presentation/widgets/financial_literacy_widget.dart';
 
 /// RegistrationScreen allows youth farmers in Rwanda to register their farm profiles.
 /// Includes cascading dropdowns, multi-select chips, and a real-time progress indicator.
@@ -27,6 +29,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final List<String> _selectedCrops = [];
 
   bool _initialized = false;
+  bool _isEditing = false;
+  int _dashboardTabIndex = 0;
 
   // Cascading Location selector mapping
   final Map<String, List<String>> _locationMatrix = {
@@ -164,6 +168,141 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     // Selected district sectors
     final sectorOptions = _selectedDistrict != null ? _locationMatrix[_selectedDistrict]! : [];
+
+    // Expose dynamic dashboards for completed farm profiles
+    final profile = profileProvider.profile;
+    if (profile != null && !_isEditing) {
+      final isEn = locale.languageCode == 'en';
+      final activeCrops = profile.cropType.isNotEmpty ? profile.cropType : 'Maize';
+
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Welcome header card
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: isDark ? Colors.white54 : Colors.black, width: 2.0),
+                  color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            profile.name,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.black,
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        ),
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _isEditing = true;
+                            });
+                          },
+                          icon: const Icon(Icons.edit, size: 16),
+                          label: Text(
+                            isEn ? 'EDIT PROFILE' : 'GUHINDURA',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '📍 ${profile.district}, ${profile.sector} Sector',
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '🌾 Crops: $activeCrops • 📐 Size: ${profile.farmSize} Ha',
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Segmented Tabs Header
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: isDark ? Colors.white24 : Colors.black12),
+                  color: isDark ? const Color(0xFF1E1E1E) : Colors.grey[100],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => setState(() => _dashboardTabIndex = 0),
+                        style: TextButton.styleFrom(
+                          backgroundColor: _dashboardTabIndex == 0 
+                              ? theme.colorScheme.primary 
+                              : Colors.transparent,
+                          foregroundColor: _dashboardTabIndex == 0 
+                              ? theme.colorScheme.onPrimary 
+                              : (isDark ? Colors.white70 : Colors.black87),
+                          shape: const RoundedRectangleBorder(),
+                        ),
+                        child: Text(
+                          isEn ? 'AI ADVISORY' : 'INAMA ZA AI',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => setState(() => _dashboardTabIndex = 1),
+                        style: TextButton.styleFrom(
+                          backgroundColor: _dashboardTabIndex == 1 
+                              ? theme.colorScheme.primary 
+                              : Colors.transparent,
+                          foregroundColor: _dashboardTabIndex == 1 
+                              ? theme.colorScheme.onPrimary 
+                              : (isDark ? Colors.white70 : Colors.black87),
+                          shape: const RoundedRectangleBorder(),
+                        ),
+                        child: Text(
+                          isEn ? 'FINANCIAL LITERACY' : 'IBY\'UMUTUNGO',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Tab contents
+              if (_dashboardTabIndex == 0)
+                AdvisoryDashboardWidget(
+                  district: profile.district,
+                  sector: profile.sector,
+                  cropType: activeCrops,
+                )
+              else
+                FinancialLiteracyWidget(
+                  farmSize: profile.farmSize,
+                ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.transparent,

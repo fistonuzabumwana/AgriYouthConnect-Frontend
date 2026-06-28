@@ -34,6 +34,8 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
 
+  ApiClient get apiClient => _apiClient;
+
   /// Check secure storage on boot to auto-restore active JWT sessions
   Future<void> checkAuthStatus() async {
     _isLoading = true;
